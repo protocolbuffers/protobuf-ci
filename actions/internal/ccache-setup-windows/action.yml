@@ -1,0 +1,36 @@
+name: 'CCache Setup'
+description: 'Setup ccache for us in Windows CI'
+inputs:
+  ccache-version:
+    required: false
+    default: '4.7.4'
+    description: A pinned version of ccache
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@cec98b9d092141f74527d0afa6feb2af698cfe89 # v1.12.1
+      with:
+        arch: x64
+        vsversion: '2019'
+
+    - name: Install ccache
+      shell: bash
+      run: choco install ccache --version=4.7.4
+
+    - name: Configure ccache environment variables
+      shell: pwsh
+      run: |
+        Write-Host $Env:GITHUB_REF
+        $cllocation = (Get-Command cl.exe).Path
+        echo "CCACHE_COMPILER=$cllocation" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "CCACHE_COMPILERTYPE=msvc" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Configure Windows-specific ccache environment variables
+      shell: bash
+      # Windows caches are about 2x larger than other platforms.
+      run: |
+        echo "CCACHE_COMPRESSLEVEL=10" >> $GITHUB_ENV
+        echo "CCACHE_MAXSIZE=200M" >> $GITHUB_ENV

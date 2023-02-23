@@ -47,16 +47,16 @@ runs:
   steps:
     - name: Authenticate
       id: auth
-      uses: ./.github/actions/internal/gcloud-auth
+      uses: ./internal/gcloud-auth
       with:
         credentials: ${{ inputs.credentials }}
 
     - name: Setup Runner
-      uses: ./.github/actions/internal/setup-runner
+      uses: ./internal/setup-runner
 
     - name: Setup Bazel
       id: bazel
-      uses: ./.github/actions/internal/bazel-setup
+      uses: ./internal/bazel-setup
       with:
         credentials-file: ${{ steps.auth.outputs.credentials-file }}
         bazel-cache: ${{ inputs.bazel-cache }}
@@ -145,4 +145,4 @@ runs:
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target'}}
-      uses: ./.github/actions/internal/repository-cache-save
+      uses: ./internal/repository-cache-save

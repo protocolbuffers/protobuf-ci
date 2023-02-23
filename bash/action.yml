@@ -27,10 +27,10 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Runner
-      uses: ./.github/actions/internal/setup-runner
+      uses: ./internal/setup-runner
 
     - name: Update stale files using Bazel
-      uses: ./.github/actions/bazel
+      uses: ./bazel
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files

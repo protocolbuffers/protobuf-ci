@@ -40,11 +40,11 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Runner
-      uses: ./.github/actions/internal/setup-runner
+      uses: ./internal/setup-runner
 
     - name: Update stale files using Bazel
       if: ${{ !inputs.skip-staleness-check }}
-      uses: ./.github/actions/bazel-docker
+      uses: ./bazel-docker
       with:
         image: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-aec4d74f2eb6938fc53ef7d9a79a4bf2da24abc1
         credentials: ${{ inputs.credentials }}
@@ -57,7 +57,7 @@ runs:
       run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}}" >> $GITHUB_ENV
 
     - name: Run Docker
-      uses: ./.github/actions/internal/docker-run
+      uses: ./internal/docker-run
       with:
         image: ${{ inputs.image }}
         command: ${{ inputs.command }}

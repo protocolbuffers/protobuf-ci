@@ -84,6 +84,6 @@ runs:
         echo "bazel-startup-flags=$BAZEL_STARTUP_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Restore Bazel repository cache
-      uses: ./internal/repository-cache-restore
+      uses: protocolbuffers/protobuf-ci/internal/repository-cache-restore@v1
       with:
         bazel-cache: ${{ inputs.bazel-cache }}

@@ -27,10 +27,10 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Runner
-      uses: ./internal/setup-runner
+      uses: protocolbuffers/protobuf-ci/internal/setup-runner@v1
 
     - name: Update stale files using Bazel
-      uses: ./bazel
+      uses: protocolbuffers/protobuf-ci/bazel@v1
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files

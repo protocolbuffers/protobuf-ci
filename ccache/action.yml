@@ -40,7 +40,7 @@ runs:
 
     - name: Setup ccache on Windows
       if: ${{ runner.os == 'Windows' }}
-      uses: ./internal/ccache-setup-windows
+      uses: protocolbuffers/protobuf-ci/internal/ccache-setup-windows@v1
     - name: Setup ccache on Mac
       if: ${{ runner.os == 'macOS' }}
       shell: bash

@@ -39,7 +39,7 @@ runs:
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     - name: Cross compile protoc for ${{ inputs.architecture }}
-      uses: ././../../_current_action/bazel-docker
+      uses: ./../../_current_action/bazel-docker
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: xcompile-protoc/${{ inputs.architecture }}

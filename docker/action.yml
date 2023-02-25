@@ -47,11 +47,11 @@ runs:
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     - name: Setup Runner
-      uses: ././../../_current_action/internal/setup-runner
+      uses: ./../../_current_action/internal/setup-runner
 
     - name: Update stale files using Bazel
       if: ${{ !inputs.skip-staleness-check }}
-      uses: ././../../_current_action/bazel-docker
+      uses: ./../../_current_action/bazel-docker
       with:
         image: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-aec4d74f2eb6938fc53ef7d9a79a4bf2da24abc1
         credentials: ${{ inputs.credentials }}
@@ -64,7 +64,7 @@ runs:
       run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}}" >> $GITHUB_ENV
 
     - name: Run Docker
-      uses: ././../../_current_action/internal/docker-run
+      uses: ./../../_current_action/internal/docker-run
       with:
         image: ${{ inputs.image }}
         command: ${{ inputs.command }}

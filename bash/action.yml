@@ -34,10 +34,10 @@ runs:
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     - name: Setup Runner
-      uses: ././../../_current_action/internal/setup-runner
+      uses: ./../../_current_action/internal/setup-runner
 
     - name: Update stale files using Bazel
-      uses: ././../../_current_action/bazel
+      uses: ./../../_current_action/bazel
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files

@@ -48,22 +48,22 @@ runs:
     - name: Symlink current Actions repo
       env:
         GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
-        GH_ACTION_CLONE: ${{ github.workspace }}/../../_current_action
+        GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     - name: Authenticate
       id: auth
-      uses: ./../../_current_action/internal/gcloud-auth
+      uses: ./../../_actions/current/internal/gcloud-auth
       with:
         credentials: ${{ inputs.credentials }}
 
     - name: Setup Runner
-      uses: ./../../_current_action/internal/setup-runner
+      uses: ./../../_actions/current/internal/setup-runner
 
     - name: Setup Bazel
       id: bazel
-      uses: ./../../_current_action/internal/bazel-setup
+      uses: ./../../_actions/current/internal/bazel-setup
       with:
         credentials-file: ${{ steps.auth.outputs.credentials-file }}
         bazel-cache: ${{ inputs.bazel-cache }}
@@ -152,4 +152,4 @@ runs:
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target'}}
-      uses: ./../../_current_action/internal/repository-cache-save
+      uses: ./../../_actions/current/internal/repository-cache-save

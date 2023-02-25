@@ -84,6 +84,6 @@ runs:
         echo "bazel-startup-flags=$BAZEL_STARTUP_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Restore Bazel repository cache
-      uses: ./../../_actions/current/internal/repository-cache-restore
+      uses: ./../../_current_action/internal/repository-cache-restore
       with:
         bazel-cache: ${{ inputs.bazel-cache }}

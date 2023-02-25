@@ -31,7 +31,7 @@ runs:
         GH_ACTION_REPO: ${{ github.action_repository }}
         GH_ACTION_REF: ${{ github.action_ref }}
       shell: bash
-      run: ln -fs /home/runner/work/_actions/$GH_ACTION_REPO/$GH_ACTION_REF/  /home/runner/work/_actions/current
+      run: ln -fs /home/runner/work/_actions/$GH_ACTION_REPO/$GH_ACTION_REF/  /home/runner/work/_current_action
 
     - name: Configure ccache environment variables
       shell: bash
@@ -47,7 +47,7 @@ runs:
 
     - name: Setup ccache on Windows
       if: ${{ runner.os == 'Windows' }}
-      uses: ./../../_actions/current/internal/ccache-setup-windows
+      uses: ././../../_current_action/internal/ccache-setup-windows
     - name: Setup ccache on Mac
       if: ${{ runner.os == 'macOS' }}
       shell: bash

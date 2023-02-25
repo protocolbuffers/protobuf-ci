@@ -36,10 +36,10 @@ runs:
         GH_ACTION_REPO: ${{ github.action_repository }}
         GH_ACTION_REF: ${{ github.action_ref }}
       shell: bash
-      run: ln -fs /home/runner/work/_actions/$GH_ACTION_REPO/$GH_ACTION_REF/  /home/runner/work/_actions/current
+      run: ln -fs /home/runner/work/_actions/$GH_ACTION_REPO/$GH_ACTION_REF/  /home/runner/work/_current_action
 
     - name: Cross compile protoc for ${{ inputs.architecture }}
-      uses: ./../../_actions/current/bazel-docker
+      uses: ././../../_current_action/bazel-docker
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: xcompile-protoc/${{ inputs.architecture }}

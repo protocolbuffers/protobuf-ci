@@ -28,7 +28,7 @@ runs:
   steps:
     - name: Symlink current Actions repo
       env:
-        GH_ACTION_DIR: /home/runner/work/_actions/${{ github.action_repository }}/${{ github.action_ref }}/
+        GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
         GH_ACTION_CLONE: ${{ github.workspace }}/../../_current_action
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE

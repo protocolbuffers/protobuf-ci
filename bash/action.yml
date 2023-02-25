@@ -26,11 +26,18 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Symlink current Actions repo
+      env:
+        GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
+        GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
+      shell: bash
+      run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
+
     - name: Setup Runner
-      uses: protocolbuffers/protobuf-ci/internal/setup-runner@v1
+      uses: ./../../_actions/current/internal/setup-runner
 
     - name: Update stale files using Bazel
-      uses: protocolbuffers/protobuf-ci/bazel@v1
+      uses: ./../../_actions/current/bazel
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files

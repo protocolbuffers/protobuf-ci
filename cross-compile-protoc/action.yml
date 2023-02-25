@@ -32,7 +32,7 @@ runs:
   using: 'composite'
   steps:
     - name: Cross compile protoc for ${{ inputs.architecture }}
-      uses: protocolbuffers/protobuf-ci/bazel-docker@v1
+      uses: protocolbuffers/protobuf-ci/bazel-docker@${{github.action_ref}}
       with:
         credentials: ${{ inputs.credentials }}
         bazel-cache: xcompile-protoc/${{ inputs.architecture }}

@@ -47,16 +47,16 @@ runs:
   steps:
     - name: Authenticate
       id: auth
-      uses: protocolbuffers/protobuf-ci/internal/gcloud-auth@v1
+      uses: protocolbuffers/protobuf-ci/internal/gcloud-auth@${{github.action_ref}}
       with:
         credentials: ${{ inputs.credentials }}
 
     - name: Setup Runner
-      uses: protocolbuffers/protobuf-ci/internal/setup-runner@v1
+      uses: protocolbuffers/protobuf-ci/internal/setup-runner@${{github.action_ref}}
 
     - name: Setup Bazel
       id: bazel
-      uses: protocolbuffers/protobuf-ci/internal/bazel-setup@v1
+      uses: protocolbuffers/protobuf-ci/internal/bazel-setup@${{github.action_ref}}
       with:
         credentials-file: ${{ steps.auth.outputs.credentials-file }}
         bazel-cache: ${{ inputs.bazel-cache }}
@@ -145,4 +145,4 @@ runs:
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target'}}
-      uses: protocolbuffers/protobuf-ci/internal/repository-cache-save@v1
+      uses: protocolbuffers/protobuf-ci/internal/repository-cache-save@${{github.action_ref}}

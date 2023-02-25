@@ -32,8 +32,11 @@ runs:
   using: 'composite'
   steps:
     - name: Symlink current Actions repo
+      env:
+        GH_ACTION_REPO: ${{ github.action_repository }}
+        GH_ACTION_REF: ${{ github.action_ref }}
       shell: bash
-      run: ln -fs /home/runner/work/_actions/${{ github.action_repository }}/${{ github.action_ref }}/  /home/runner/work/_actions/current
+      run: ln -fs /home/runner/work/_actions/$GH_ACTION_REPO/$GH_ACTION_REF/  /home/runner/work/_actions/current
 
     - name: Cross compile protoc for ${{ inputs.architecture }}
       uses: ./../../_actions/current/bazel-docker

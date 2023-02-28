@@ -23,6 +23,11 @@ inputs:
     required: true
     description: The target architecture to build for
     type: string
+  image:
+    required: false
+    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-aec4d74f2eb6938fc53ef7d9a79a4bf2da24abc1
+    description: "The docker image to use"
+    type: string
 outputs:
   protoc:
     description: "Cross-compiled protoc location.  Also output to $PROTOC"
@@ -42,6 +47,7 @@ runs:
       uses: ./../../_actions/current/bazel-docker
       with:
         credentials: ${{ inputs.credentials }}
+        image: ${{ inputs.image }}
         bazel-cache: xcompile-protoc/${{ inputs.architecture }}
         bash: |
           bazel build //:protoc --config=${{ inputs.architecture }} $BAZEL_FLAGS

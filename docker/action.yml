@@ -24,7 +24,7 @@ inputs:
     description: A command to run in the docker image
   image:
     required: false
-    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-aec4d74f2eb6938fc53ef7d9a79a4bf2da24abc1
+    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-6361b3a6e5c97e9951d03a4de28542fc45f1adab
     description: "The docker image to use"
     type: string
   platform:

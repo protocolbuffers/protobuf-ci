@@ -25,7 +25,7 @@ inputs:
     type: string
   image:
     required: false
-    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-aec4d74f2eb6938fc53ef7d9a79a4bf2da24abc1
+    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-6361b3a6e5c97e9951d03a4de28542fc45f1adab
     description: "The docker image to use"
     type: string
 outputs:
@@ -50,8 +50,8 @@ runs:
         image: ${{ inputs.image }}
         bazel-cache: xcompile-protoc/${{ inputs.architecture }}
         bash: |
-          bazel build //:protoc --config=${{ inputs.architecture }} $BAZEL_FLAGS
-          cp bazel-bin/protoc .
+          bazel build //:protoc_static --config=${{ inputs.architecture }} $BAZEL_FLAGS
+          cp bazel-bin/protoc_static .
 
     - name: Set protoc environment variable
       shell: bash
@@ -61,5 +61,5 @@ runs:
       id: output
       shell: bash
       run: |
-        mv protoc $PROTOC
+        mv protoc_static $PROTOC
         echo "protoc=$PROTOC" >> $GITHUB_OUTPUT

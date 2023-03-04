@@ -35,6 +35,10 @@ inputs:
     required: false
     description: "Skip staleness checks"
     type: boolean
+  entrypoint:
+    required: false
+    description: "Specify a custom entrypoint for docker"
+    type: string
 
 runs:
   using: 'composite'
@@ -58,10 +62,15 @@ runs:
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
 
-    - name: Generate docker flags
+    - name: Generate docker platform flags
       if: inputs.platform
       shell: bash
-      run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}}" >> $GITHUB_ENV
+      run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}} $DOCKER_RUN_FLAGS" >> $GITHUB_ENV
+
+    - name: Generate docker entrypoing flags
+      if: inputs.entrypoint
+      shell: bash
+      run: echo "DOCKER_RUN_FLAGS=--entrypoint ${{inputs.entrypoint}} $DOCKER_RUN_FLAGS " >> $GITHUB_ENV
 
     - name: Run Docker
       uses: ./../../_actions/current/internal/docker-run

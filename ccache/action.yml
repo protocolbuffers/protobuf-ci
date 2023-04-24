@@ -22,6 +22,11 @@ inputs:
   support-modules:
     required: false
     description: Whether or not we need to support modules.  This can result in extra cache misses.
+  vsversion:
+    required: false
+    default: '2019'
+    description: The version of Visual Studio to use (Windows only)
+    type: string
 
 runs:
   using: 'composite'
@@ -48,6 +53,8 @@ runs:
     - name: Setup ccache on Windows
       if: ${{ runner.os == 'Windows' }}
       uses: ./../../_actions/current/internal/ccache-setup-windows
+      with:
+        vsversion: ${{ inputs.vsversion }}
     - name: Setup ccache on Mac
       if: ${{ runner.os == 'macOS' }}
       shell: bash

@@ -27,6 +27,11 @@ inputs:
     default: '2019'
     description: The version of Visual Studio to use (Windows only)
     type: string
+  ccache-version:
+    required: false
+    default: '4.8'
+    description: A pinned version of ccache
+    type: string
 
 runs:
   using: 'composite'
@@ -54,6 +59,7 @@ runs:
       if: ${{ runner.os == 'Windows' }}
       uses: ./../../_actions/current/internal/ccache-setup-windows
       with:
+        ccache-version: ${{ inputs.ccache-version }}
         vsversion: ${{ inputs.vsversion }}
     - name: Setup ccache on Mac
       if: ${{ runner.os == 'macOS' }}

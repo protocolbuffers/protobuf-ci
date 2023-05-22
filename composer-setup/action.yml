@@ -27,20 +27,24 @@ runs:
   using: 'composite'
   steps:
     - name: Cache Composer dependencies
-      #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
       if: ${{ github.event_name != 'pull_request_target' }}
       uses: actions/cache@v3
       with:
         path: /tmp/composer-cache
-        key: composer-${{ inputs.cache-prefix }}-${{ runner.os }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.cache-prefix }}
+          composer-${{ runner.os }}
 
     - name: Restore Bazelisk
-      #if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
       if: ${{ github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: /tmp/composer-cache
-        key: composer-${{ inputs.cache-prefix }}-${{ runner.os }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.cache-prefix }}
+          composer-${{ runner.os }}
 
     - uses: php-actions/composer@58260d1d3c7c1576becac3ac182175adf510e953 # v6
       # This only works on Linux (see https://github.com/php-actions/composer/issues/95)

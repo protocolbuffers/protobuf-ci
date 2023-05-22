@@ -51,7 +51,6 @@ runs:
       # php-actions/composer would be ideal here, but doesn't work on non-Linux
       # (see https://github.com/php-actions/composer/issues/95)
     - name: Non-Linux composer install
-      if: ${{ runner.os != 'Linux' }}
       shell: bash
       run: COMPOSER_HOME=/tmp/composer-cache composer install --ignore-platform-reqs --working-dir=${{ inputs.directory }}
 

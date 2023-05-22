@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: 'Composer Setup'
-description: 'Run a Bazel-based docker image for Protobuf CI testing'
+description: 'Run Composer to install all necessary dependencies'
 inputs:
   cache-prefix:
     required: true
@@ -36,7 +36,7 @@ runs:
           composer-${{ runner.os }}-${{ inputs.cache-prefix }}
           composer-${{ runner.os }}
 
-    - name: Restore Bazelisk
+    - name: Restore Composer dependencies from cache
       if: ${{ github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:

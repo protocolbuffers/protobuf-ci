@@ -28,7 +28,7 @@ runs:
   steps:
     - name: Cache Composer dependencies
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/cache@v3
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: /tmp/composer-cache
         key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}

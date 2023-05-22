@@ -1,0 +1,59 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 'Composer Setup'
+description: 'Run Composer to install all necessary dependencies'
+inputs:
+  cache-prefix:
+    required: true
+    description: A unique prefix to prevent cache pollution
+    type: string
+  directory:
+    required: false
+    description: The directory containing composer.json
+
+runs:
+  using: 'composite'
+  steps:
+    # This is the trusted path, which can upload to our cache.
+    - name: Cache Composer dependencies
+      if: ${{ github.event_name != 'pull_request_target' }}
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      with:
+        path: /tmp/composer-cache
+        key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.cache-prefix }}
+          composer-${{ runner.os }}
+
+    # Identical to the above, but will never upload a new cache (untrusted path).
+    - name: Restore Composer dependencies from cache
+      if: ${{ github.event_name == 'pull_request_target' }}
+      uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      with:
+        path: /tmp/composer-cache
+        key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.cache-prefix }}
+          composer-${{ runner.os }}
+
+      # php-actions/composer would be ideal here, but doesn't work on non-Linux
+      # (see https://github.com/php-actions/composer/issues/95)
+    - name: Run Composer install
+      shell: bash
+      run: COMPOSER_HOME=/tmp/composer-cache composer install --ignore-platform-reqs --working-dir=${{ inputs.directory }}
+
+    - name: Fix permissions
+      shell: bash
+      run: sudo chmod -R 777 ${{ inputs.directory }}/composer.lock ${{ inputs.directory }}/vendor

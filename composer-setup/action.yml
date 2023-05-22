@@ -48,4 +48,4 @@ runs:
 
     - name: Fix permissions
       shell: bash
-      run: chmod 777 ${{ inputs.directory }}/composer.lock
+      run: sudo chmod 777 ${{ inputs.directory }}/composer.lock

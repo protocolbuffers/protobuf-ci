@@ -42,10 +42,17 @@ runs:
         path: /tmp/composer-cache
         key: composer-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
 
-    - uses: php-actions/composer@v6
+    - uses: php-actions/composer@58260d1d3c7c1576becac3ac182175adf510e953 # v6
+      # This only works on Linux (see https://github.com/php-actions/composer/issues/95)
+      if: ${{ runner.os == 'Linux' }}
       with:
         args: --ignore-platform-reqs --working-dir=${{ inputs.directory }}
 
+    - name: Non-Linux composer install
+      if: ${{ runner.os != 'Linux' }}
+      shell: bash
+      run: COMPOSER_HOME=/tmp/composer-cache composer install --ignore-platform-reqs --working-dir=${{ inputs.directory }}
+
     - name: Fix permissions
       shell: bash
-      run: sudo chmod 777 ${{ inputs.directory }}/composer.lock
+      run: sudo chmod -R 777 ${{ inputs.directory }}/composer.lock ${{ inputs.directory }}/vendor

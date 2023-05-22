@@ -32,7 +32,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: /tmp/composer-cache
-        key: composer-${{ inputs.cache-prefix }}-${{ hashFiles('**/composer.json') }}
+        key: composer-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
 
     - name: Restore Bazelisk
       #if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
@@ -40,8 +40,12 @@ runs:
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: /tmp/composer-cache
-        key: composer-${{ inputs.cache-prefix }}-${{ hashFiles('**/composer.json') }}
+        key: composer-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
 
     - uses: php-actions/composer@v6
       with:
         args: --ignore-platform-reqs --working-dir=${{ inputs.directory }}
+
+    - name: Fix permissions
+      shell: bash
+      run: chmod 777 ${{ inputs.directory }}/composer.lock

@@ -26,6 +26,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    # This is the trusted path, which can upload to our cache.
     - name: Cache Composer dependencies
       if: ${{ github.event_name != 'pull_request_target' }}
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
@@ -36,6 +37,7 @@ runs:
           composer-${{ runner.os }}-${{ inputs.cache-prefix }}
           composer-${{ runner.os }}
 
+    # Identical to the above, but will never upload a new cache (untrusted path).
     - name: Restore Composer dependencies from cache
       if: ${{ github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
@@ -46,12 +48,8 @@ runs:
           composer-${{ runner.os }}-${{ inputs.cache-prefix }}
           composer-${{ runner.os }}
 
-    - uses: php-actions/composer@58260d1d3c7c1576becac3ac182175adf510e953 # v6
-      # This only works on Linux (see https://github.com/php-actions/composer/issues/95)
-      if: ${{ runner.os == 'Linux' }}
-      with:
-        args: --ignore-platform-reqs --working-dir=${{ inputs.directory }}
-
+      # php-actions/composer would be ideal here, but doesn't work on non-Linux
+      # (see https://github.com/php-actions/composer/issues/95)
     - name: Non-Linux composer install
       if: ${{ runner.os != 'Linux' }}
       shell: bash

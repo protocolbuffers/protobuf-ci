@@ -39,6 +39,10 @@ inputs:
     required: false
     description: "Specify a custom entrypoint for docker"
     type: string
+  env:
+    required: false
+    description: "Specify an environment variable for docker"
+    type: string
 
 runs:
   using: 'composite'
@@ -67,14 +71,19 @@ runs:
       shell: bash
       run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}} $DOCKER_RUN_FLAGS" >> $GITHUB_ENV
 
-    - name: Generate docker entrypoing flags
+    - name: Generate docker entrypoint flags
       if: inputs.entrypoint
       shell: bash
       run: echo "DOCKER_RUN_FLAGS=--entrypoint ${{inputs.entrypoint}} $DOCKER_RUN_FLAGS " >> $GITHUB_ENV
+
+    - name: Generate docker environment variable flags
+      if: inputs.env
+      shell: bash
+      run: echo "DOCKER_RUN_FLAGS=-e ${{inputs.env}} $DOCKER_RUN_FLAGS " >> $GITHUB_ENV
 
     - name: Run Docker
       uses: ./../../_actions/current/internal/docker-run
       with:
         image: ${{ inputs.image }}
         command: ${{ inputs.command }}
-        run-flags: ${{ env.DOCKER_RUN_FLAGS }}
+        run-flags: ${{ inputs.run-flags }} ${{ env.DOCKER_RUN_FLAGS }}

@@ -39,6 +39,10 @@ inputs:
     required: false
     description: "Specify a custom entrypoint for docker"
     type: string
+  extra-flags:
+    required: false
+    description: "Specify extra flags for docker run"
+    type: string
 
 runs:
   using: 'composite'
@@ -67,7 +71,7 @@ runs:
       shell: bash
       run: echo "DOCKER_RUN_FLAGS=--platform ${{inputs.platform}} $DOCKER_RUN_FLAGS" >> $GITHUB_ENV
 
-    - name: Generate docker entrypoing flags
+    - name: Generate docker entrypoint flags
       if: inputs.entrypoint
       shell: bash
       run: echo "DOCKER_RUN_FLAGS=--entrypoint ${{inputs.entrypoint}} $DOCKER_RUN_FLAGS " >> $GITHUB_ENV
@@ -77,4 +81,4 @@ runs:
       with:
         image: ${{ inputs.image }}
         command: ${{ inputs.command }}
-        run-flags: ${{ env.DOCKER_RUN_FLAGS }}
+        run-flags: ${{ env.DOCKER_RUN_FLAGS }} ${{ inputs.extra-flags }}

@@ -31,7 +31,7 @@ runs:
       if: ${{ github.event_name != 'pull_request_target' }}
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
-        path: /tmp/composer-cache
+        path: ${{ github.workspace }}/composer-cache
         key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
         restore-keys: |
           composer-${{ runner.os }}-${{ inputs.cache-prefix }}
@@ -42,17 +42,21 @@ runs:
       if: ${{ github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
-        path: /tmp/composer-cache
+        path: ${{ github.workspace }}/composer-cache
         key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}
         restore-keys: |
           composer-${{ runner.os }}-${{ inputs.cache-prefix }}
           composer-${{ runner.os }}
 
+    - name: Set composer cache environment variable
+      shell: bash
+      run: echo "COMPOSER_HOME=${{ github.workspace }}/composer-cache" >> $GITHUB_ENV
+
       # php-actions/composer would be ideal here, but doesn't work on non-Linux
       # (see https://github.com/php-actions/composer/issues/95)
     - name: Run Composer install
       shell: bash
-      run: COMPOSER_HOME=/tmp/composer-cache composer install --ignore-platform-reqs --working-dir=${{ inputs.directory }}
+      run: composer install --ignore-platform-reqs --working-dir=${{ inputs.directory }}
 
     - name: Fix permissions
       shell: bash

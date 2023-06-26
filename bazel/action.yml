@@ -29,7 +29,7 @@ inputs:
   version:
     required: false
     description: A pinned Bazel version to use
-    default: '5.1.1'
+    default: ''
     type: string
   bazel:
     required: false
@@ -68,6 +68,22 @@ runs:
         credentials-file: ${{ steps.auth.outputs.credentials-file }}
         bazel-cache: ${{ inputs.bazel-cache }}
 
+    # Earlier versions of Bazel cause relatively high flake rates due to
+    # https://github.com/bazelbuild/bazel/issues/17437.  Default to 6.2.0 where
+    # the BAZEL_OSX_EXECUTE_TIMEOUT environment variable can override this
+    # timeout.
+    - name: Workaround mac timeouts
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        echo "BAZEL_VERSION=${{ inputs.version || '6.2.0' }}" >> $GITHUB_ENV
+        echo "BAZEL_OSX_EXECUTE_TIMEOUT=600" >> $GITHUB_ENV
+
+    - name: Select default Bazel version
+      if: runner.os != 'macOS'
+      shell: bash
+      run: echo "BAZEL_VERSION=${{ inputs.version || '5.1.1' }}" >> $GITHUB_ENV
+
     - name: Get Linux bazelisk path
       if: runner.os == 'Linux'
       shell: bash
@@ -88,14 +104,14 @@ runs:
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ env.BAZELISK_PATH }}
-        key: bazel-${{ runner.os }}-${{ inputs.version }}
+        key: bazel-${{ runner.os }}-${{ env.BAZEL_VERSION }}
 
     - name: Restore Bazelisk
       if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ env.BAZELISK_PATH }}
-        key: bazel-${{ runner.os }}-${{ inputs.version }}
+        key: bazel-${{ runner.os }}-${{ env.BAZEL_VERSION}}
 
     - name: Hook up repository Cache
       shell: bash
@@ -108,7 +124,7 @@ runs:
 
     - name: Pin Bazel version
       shell: bash
-      run: echo "USE_BAZEL_VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+      run: echo "USE_BAZEL_VERSION=${{ env.BAZEL_VERSION }}" >> $GITHUB_ENV
 
     - name: Output Bazel version
       shell: bash

@@ -76,7 +76,7 @@ runs:
       if: runner.os == 'macOS'
       shell: bash
       run: |
-        echo "BAZEL_VERSION=${{ inputs.version || '6.2.0' }}" >> $GITHUB_ENV
+        echo "BAZEL_VERSION=${{ inputs.version || '6.1.0' }}" >> $GITHUB_ENV
         echo "BAZEL_OSX_EXECUTE_TIMEOUT=600" >> $GITHUB_ENV
 
     - name: Select default Bazel version

@@ -20,8 +20,7 @@ inputs:
     description: "The GCP credentials to use for reading the docker image"
     type: string
   image:
-    required: false
-    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:6.3.0-91a0ac83e968068672bc6001a4d474cfd9a50f1d
+    required: true
     description: "The docker image to use"
     type: string
   bazel-cache:

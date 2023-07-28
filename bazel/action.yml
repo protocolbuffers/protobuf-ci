@@ -29,7 +29,7 @@ inputs:
   version:
     required: false
     description: A pinned Bazel version to use
-    default: ''
+    default: '6.3.0'
     type: string
   bazel:
     required: false
@@ -68,21 +68,14 @@ runs:
         credentials-file: ${{ steps.auth.outputs.credentials-file }}
         bazel-cache: ${{ inputs.bazel-cache }}
 
-    # Earlier versions of Bazel cause relatively high flake rates due to
-    # https://github.com/bazelbuild/bazel/issues/17437.  Default to 6.2.0 where
-    # the BAZEL_OSX_EXECUTE_TIMEOUT environment variable can override this
-    # timeout.
+    # Bazel on MacOS has a relatively high flake rates due to
+    # https://github.com/bazelbuild/bazel/issues/17437.  Set the
+    # BAZEL_OSX_EXECUTE_TIMEOUT environment variable to override this timeout.
+    # Note: this only works on Bazel 6+
     - name: Workaround mac timeouts
       if: runner.os == 'macOS'
       shell: bash
-      run: |
-        echo "BAZEL_VERSION=${{ inputs.version || '6.1.0' }}" >> $GITHUB_ENV
-        echo "BAZEL_OSX_EXECUTE_TIMEOUT=600" >> $GITHUB_ENV
-
-    - name: Select default Bazel version
-      if: runner.os != 'macOS'
-      shell: bash
-      run: echo "BAZEL_VERSION=${{ inputs.version || '5.1.1' }}" >> $GITHUB_ENV
+      run: echo "BAZEL_OSX_EXECUTE_TIMEOUT=600" >> $GITHUB_ENV
 
     - name: Get Linux bazelisk path
       if: runner.os == 'Linux'

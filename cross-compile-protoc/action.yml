@@ -24,8 +24,7 @@ inputs:
     description: The target architecture to build for
     type: string
   image:
-    required: false
-    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-6361b3a6e5c97e9951d03a4de28542fc45f1adab
+    required: true
     description: "The docker image to use"
     type: string
 outputs:

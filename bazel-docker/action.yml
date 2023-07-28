@@ -21,7 +21,7 @@ inputs:
     type: string
   image:
     required: false
-    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:5.1.1-6361b3a6e5c97e9951d03a4de28542fc45f1adab
+    default: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:6.3.0-91a0ac83e968068672bc6001a4d474cfd9a50f1d
     description: "The docker image to use"
     type: string
   bazel-cache:

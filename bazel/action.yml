@@ -41,6 +41,10 @@ inputs:
       A bash command to run.  $BAZEL_FLAGS and $BAZEL_STARTUP_FLAGS will be
       available to use for bazel runs.
     type: string
+  exclude-targets:
+    required: false
+    description: "Bazel target patterns to exclude. Each pattern must be prefixed with a minus sign."
+    type: string
 
 runs:
   using: 'composite'
@@ -132,7 +136,7 @@ runs:
       if: ${{ !inputs.bash }}
       run: >-
         bazelisk ${{ steps.bazel.outputs.bazel-startup-flags }}
-        ${{ inputs.bazel }} $BAZEL_FLAGS
+        ${{ inputs.bazel }} $BAZEL_FLAGS -- ${{ inputs.exclude-targets }}
       shell: bash
 
     - name: Save Bazel repository cache

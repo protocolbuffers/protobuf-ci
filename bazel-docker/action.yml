@@ -38,6 +38,10 @@ inputs:
     required: false
     description: "A bash command to run.  $BAZEL_FLAGS will be available to use for bazel runs."
     type: string
+  exclude-targets:
+    required: false
+    description: "Bazel target patterns to exclude. Each pattern must be prefixed with a minus sign."
+    type: string
 
 runs:
   using: 'composite'
@@ -87,7 +91,7 @@ runs:
       if: ${{ !inputs.bash }}
       with:
         image: ${{ inputs.image }}
-        command: ${{ inputs.bazel }} ${{ env.BAZEL_FLAGS }}
+        command: ${{ inputs.bazel }} ${{ env.BAZEL_FLAGS }} -- ${{ inputs.exclude-targets }}
 
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.

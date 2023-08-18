@@ -136,7 +136,7 @@ runs:
       if: ${{ !inputs.bash }}
       run: >-
         bazelisk ${{ steps.bazel.outputs.bazel-startup-flags }}
-        ${{ inputs.bazel }} $BAZEL_FLAGS -- ${{ inputs.exclude-targets }}
+        ${{ inputs.bazel }} $BAZEL_FLAGS ${{ inputs.exclude-targets && format('-- {0}', inputs.exclude-targets) || '' }}
       shell: bash
 
     - name: Save Bazel repository cache

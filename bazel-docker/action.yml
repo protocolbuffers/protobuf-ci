@@ -91,7 +91,7 @@ runs:
       if: ${{ !inputs.bash }}
       with:
         image: ${{ inputs.image }}
-        command: ${{ inputs.bazel }} ${{ env.BAZEL_FLAGS }} -- ${{ inputs.exclude-targets }}
+        command: ${{ inputs.bazel }} ${{ env.BAZEL_FLAGS }} ${{ inputs.exclude-targets && format('-- {0}', inputs.exclude-targets) || '' }}
 
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.

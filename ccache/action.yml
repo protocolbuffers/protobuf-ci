@@ -34,7 +34,7 @@ inputs:
     type: string
   windows-arch:
     required: false
-    default: 'win64'
+    default: 'x64'
     description: The architecture to use (Windows only)
     type: string
 

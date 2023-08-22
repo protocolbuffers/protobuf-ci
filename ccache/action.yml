@@ -32,6 +32,11 @@ inputs:
     default: '4.8'
     description: A pinned version of ccache
     type: string
+  windows-arch:
+    required: false
+    default: 'x64'
+    description: The architecture to use for windows builds
+    type: string
 
 runs:
   using: 'composite'
@@ -49,6 +54,7 @@ runs:
       with:
         ccache-version: ${{ inputs.ccache-version }}
         vsversion: ${{ inputs.vsversion }}
+        arch: ${{ inputs.windows-arch }}
     - name: Setup ccache on Mac
       if: ${{ runner.os == 'macOS' }}
       shell: bash

@@ -34,8 +34,8 @@ inputs:
     type: string
   windows-arch:
     required: false
-    default: 'x64'
-    description: The architecture to use for windows builds
+    default: 'win64'
+    description: The architecture to use (Windows only)
     type: string
 
 runs:

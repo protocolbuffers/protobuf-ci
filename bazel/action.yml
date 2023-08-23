@@ -101,14 +101,14 @@ runs:
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ env.BAZELISK_PATH }}
-        key: bazel-${{ runner.os }}-${{ env.BAZEL_VERSION }}
+        key: bazel-${{ runner.os }}-${{ inputs.version }}
 
     - name: Restore Bazelisk
       if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ env.BAZELISK_PATH }}
-        key: bazel-${{ runner.os }}-${{ env.BAZEL_VERSION}}
+        key: bazel-${{ runner.os }}-${{ inputs.version}}
 
     - name: Hook up repository Cache
       shell: bash
@@ -121,7 +121,7 @@ runs:
 
     - name: Pin Bazel version
       shell: bash
-      run: echo "USE_BAZEL_VERSION=${{ env.BAZEL_VERSION }}" >> $GITHUB_ENV
+      run: echo "USE_BAZEL_VERSION=${{ inputs.version }}" >> $GITHUB_ENV
 
     - name: Output Bazel version
       shell: bash

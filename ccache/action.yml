@@ -48,6 +48,18 @@ runs:
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
+    - name: Configure ccache environment variables
+      shell: bash
+      run: |
+        echo "CCACHE_BASEDIR=${{ github.workspace }}" >> $GITHUB_ENV
+        echo "CCACHE_DIR=${{ github.workspace }}/.ccache" >> $GITHUB_ENV
+        echo "CCACHE_COMPRESS=true" >> $GITHUB_ENV
+        echo "CCACHE_COMPRESSLEVEL=5" >> $GITHUB_ENV
+        echo "CCACHE_MAXSIZE=150M" >> $GITHUB_ENV
+        echo "CCACHE_SLOPPINESS=clang_index_store,include_file_ctime,include_file_mtime,file_macro,time_macros" >> $GITHUB_ENV
+        echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
+        echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=$(which ccache || echo "ccache") -DCMAKE_CXX_COMPILER_LAUNCHER=$(which ccache || echo "ccache")" >> $GITHUB_ENV
+
     - name: Setup ccache on Windows
       if: ${{ runner.os == 'Windows' }}
       uses: ./../../_actions/current/internal/ccache-setup-windows
@@ -59,18 +71,6 @@ runs:
       if: ${{ runner.os == 'macOS' }}
       shell: bash
       run: brew install ccache
-
-    - name: Configure ccache environment variables
-      shell: bash
-      run: |
-        echo "CCACHE_BASEDIR=${{ github.workspace }}" >> $GITHUB_ENV
-        echo "CCACHE_DIR=${{ github.workspace }}/.ccache" >> $GITHUB_ENV
-        echo "CCACHE_COMPRESS=true" >> $GITHUB_ENV
-        echo "CCACHE_COMPRESSLEVEL=5" >> $GITHUB_ENV
-        echo "CCACHE_MAXSIZE=100M" >> $GITHUB_ENV
-        echo "CCACHE_SLOPPINESS=clang_index_store,include_file_ctime,include_file_mtime,file_macro,time_macros" >> $GITHUB_ENV
-        echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
-        echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=$(which ccache || echo "ccache") -DCMAKE_CXX_COMPILER_LAUNCHER=$(which ccache || echo "ccache")" >> $GITHUB_ENV
 
     - name: Setup fixed path ccache caching
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4

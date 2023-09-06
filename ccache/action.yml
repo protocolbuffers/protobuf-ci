@@ -55,7 +55,7 @@ runs:
         echo "CCACHE_DIR=${{ github.workspace }}/.ccache" >> $GITHUB_ENV
         echo "CCACHE_COMPRESS=true" >> $GITHUB_ENV
         echo "CCACHE_COMPRESSLEVEL=5" >> $GITHUB_ENV
-        echo "CCACHE_MAXSIZE=100M" >> $GITHUB_ENV
+        echo "CCACHE_MAXSIZE=150M" >> $GITHUB_ENV
         echo "CCACHE_SLOPPINESS=clang_index_store,include_file_ctime,include_file_mtime,file_macro,time_macros" >> $GITHUB_ENV
         echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
         echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=$(which ccache || echo "ccache") -DCMAKE_CXX_COMPILER_LAUNCHER=$(which ccache || echo "ccache")" >> $GITHUB_ENV

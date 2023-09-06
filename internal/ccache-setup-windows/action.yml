@@ -86,4 +86,4 @@ runs:
       # Windows caches are about 2x larger than other platforms.
       run: |
         echo "CCACHE_COMPRESSLEVEL=10" >> $GITHUB_ENV
-        echo "CCACHE_MAXSIZE=200M" >> $GITHUB_ENV
+        echo "CCACHE_MAXSIZE=300M" >> $GITHUB_ENV

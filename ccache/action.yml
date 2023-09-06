@@ -48,18 +48,6 @@ runs:
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
-    - name: Setup ccache on Windows
-      if: ${{ runner.os == 'Windows' }}
-      uses: ./../../_actions/current/internal/ccache-setup-windows
-      with:
-        ccache-version: ${{ inputs.ccache-version }}
-        vsversion: ${{ inputs.vsversion }}
-        arch: ${{ inputs.windows-arch }}
-    - name: Setup ccache on Mac
-      if: ${{ runner.os == 'macOS' }}
-      shell: bash
-      run: brew install ccache
-
     - name: Configure ccache environment variables
       shell: bash
       run: |
@@ -71,6 +59,18 @@ runs:
         echo "CCACHE_SLOPPINESS=clang_index_store,include_file_ctime,include_file_mtime,file_macro,time_macros" >> $GITHUB_ENV
         echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
         echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=$(which ccache || echo "ccache") -DCMAKE_CXX_COMPILER_LAUNCHER=$(which ccache || echo "ccache")" >> $GITHUB_ENV
+
+    - name: Setup ccache on Windows
+      if: ${{ runner.os == 'Windows' }}
+      uses: ./../../_actions/current/internal/ccache-setup-windows
+      with:
+        ccache-version: ${{ inputs.ccache-version }}
+        vsversion: ${{ inputs.vsversion }}
+        arch: ${{ inputs.windows-arch }}
+    - name: Setup ccache on Mac
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      run: brew install ccache
 
     - name: Setup fixed path ccache caching
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4

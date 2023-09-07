@@ -36,6 +36,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Validate Docker image
+      if: ${{ github.event_name == 'pull_request_target' && contains(inputs.image, 'us-docker.pkg.dev/protobuf-build/release-containers/') }}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('Pull requests from forks cannot use release Docker images.')
+
     - name: Authenticate for GAR use
       shell: bash
       run: gcloud auth configure-docker -q us-docker.pkg.dev

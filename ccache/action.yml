@@ -74,7 +74,9 @@ runs:
 
     - name: Check ccache version
       shell: bash
-      run: ccache --version || echo "No local ccache installation found"
+      run: |
+        which ccache
+        ccache --version || echo "No local ccache installation found"
 
     - name: Setup fixed path ccache caching
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4

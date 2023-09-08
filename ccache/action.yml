@@ -75,7 +75,7 @@ runs:
     - name: Check ccache version
       shell: bash
       run: |
-        which ccache
+        which ccache || echo "No local ccache installation found"
         ccache --version || echo "No local ccache installation found"
 
     - name: Setup fixed path ccache caching

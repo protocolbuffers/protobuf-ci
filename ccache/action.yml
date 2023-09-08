@@ -58,7 +58,7 @@ runs:
         echo "CCACHE_MAXSIZE=150M" >> $GITHUB_ENV
         echo "CCACHE_SLOPPINESS=clang_index_store,include_file_ctime,include_file_mtime,file_macro,time_macros" >> $GITHUB_ENV
         echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
-        echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=$(which ccache || echo "ccache")" >> $GITHUB_ENV
+        echo "CCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
 
     - name: Setup ccache on Windows
       if: ${{ runner.os == 'Windows' }}

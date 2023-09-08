@@ -72,6 +72,10 @@ runs:
       shell: bash
       run: brew install ccache
 
+    - name: Check ccache version
+      shell: bash
+      run: ccache --version || echo "No local ccache installation found"
+
     - name: Setup fixed path ccache caching
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:

@@ -55,11 +55,6 @@ runs:
       shell: bash
       run: echo "SCCACHE_GCS_RW_MODE=READ_WRITE" >> $GITHUB_ENV
 
-    - name: Setup sccache on Mac
-      if: ${{ runner.os == 'macOS' }}
-      shell: bash
-      run: brew install sccache
-
     - name: Configure sccache cmake arguments
       shell: bash
       run: |

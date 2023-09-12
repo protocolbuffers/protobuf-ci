@@ -44,21 +44,16 @@ runs:
     - name: Configure sccache environment variables
       shell: bash
       run: |
-        echo "SCCACHE_CONF=${{ github.workspace }}/sccache-config" >> $GITHUB_ENV
         echo "SCCACHE_GCS_KEY_PATH=${{ steps.auth.outputs.credentials-file }}" >> $GITHUB_ENV
-
-    - name: Configure sccache
-      shell: bash
-      run: |
-        echo "[cache.gcs]" >> $SCCACHE_CONF
-        echo "bucket=\"protobuf-sccache\"" >> $SCCACHE_CONF
-        echo "key_prefix=\"${{ inputs.cache-prefix }} \"" >> $SCCACHE_CONF
+        echo "SCCACHE_GCS_RW_MODE=READ" >> $GITHUB_ENV
+        echo "SCCACHE_GCS_BUCKET=protobuf-sccache" >> $GITHUB_ENV
+        echo "SCCACHE_GCS_KEY_PREFIX=\"${{ inputs.cache-prefix }}\"" >> $GITHUB_ENV
 
     # Only trusted runs should have write access to our caches.
     - name: Disable sccache cache writing
       if: ${{ github.event_name != 'pull_request_target' }}
       shell: bash
-      run: echo "rw_mode=\"READ_WRITE\"" >> $SCCACHE_CONF
+      run: echo "SCCACHE_GCS_RW_MODE=READ_WRITE" >> $GITHUB_ENV
 
     - name: Setup sccache on Mac
       if: ${{ runner.os == 'macOS' }}

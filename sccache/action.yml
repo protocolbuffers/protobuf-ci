@@ -15,13 +15,14 @@
 name: 'Setup sccache'
 description: 'Setup sccache for Protobuf CI testing'
 inputs:
-  credentials:
-    required: true
-    description: The GCP credentials to use for caching
-    type: string
   cache-prefix:
     required: true
     description: A unique prefix to prevent cache pollution
+    type: string
+  version:
+    required: false
+    default: 'v0.5.2'
+    description: The version of sccache to use
     type: string
 
 runs:
@@ -33,13 +34,6 @@ runs:
         GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
-
-    # Setup credentials file
-    - name: Authenticate GCloud
-      id: auth
-      uses: ./../../_actions/current/internal/gcloud-auth
-      with:
-        credentials: ${{ inputs.credentials }}
 
     - name: Configure sccache environment variables
       shell: bash
@@ -56,8 +50,9 @@ runs:
 
     - name: Install sccache on non-Linux machines
       if: ${{ runner.os != 'Linux' }}
-      shell: bash
-      run: cargo install --locked sccache
+      uses: mozilla-actions/sccache-action@8417cffc2ec64127ad83077aceaa8631f7cdc83e # v0.0.3
+      with:
+        version: ${{ inputs.version }}
 
     - name: Configure sccache cmake arguments
       shell: bash

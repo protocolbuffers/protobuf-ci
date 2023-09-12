@@ -28,6 +28,16 @@ inputs:
     default: 'v0.5.2'
     description: The version of sccache to use
     type: string
+  windows-vsversion:
+    required: false
+    default: '2019'
+    description: The version of Visual Studio to use (Windows only)
+    type: string
+  windows-arch:
+    required: false
+    default: 'x64'
+    description: The architecture to use (Windows only)
+    type: string
 
 runs:
   using: 'composite'
@@ -39,7 +49,6 @@ runs:
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
-    # Setup credentials file
     - name: Authenticate GCloud
       id: auth
       uses: ./../../_actions/current/internal/gcloud-auth
@@ -72,6 +81,13 @@ runs:
         echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
         which sccache || echo "No local ccache installation found"
         sccache --version || echo "No local ccache installation found"
+
+    - name: Setup MSVC
+      if: ${{ runner.os == 'Windows' }}
+      uses: ilammy/msvc-dev-cmd@cec98b9d092141f74527d0afa6feb2af698cfe89 # v1.12.1
+      with:
+        arch: ${{ inputs.windows-arch }}
+        vsversion: ${{ inputs.windows-vsversion }}
 
     - name: Zero out sccache
       if: ${{ runner.os != 'Linux' }}

@@ -35,22 +35,18 @@ runs:
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     # Setup credentials file
-    #- name: Authenticate GCloud
-    #  id: auth
-    #  uses: ./../../_actions/current/internal/gcloud-auth
-    #  with:
-    #    credentials: ${{ inputs.credentials }}
+    - name: Authenticate GCloud
+      id: auth
+      uses: ./../../_actions/current/internal/gcloud-auth
+      with:
+        credentials: ${{ inputs.credentials }}
 
     - name: Configure sccache environment variables
       shell: bash
       run: |
-        cat <<EOT >> ${{ github.workspace }}/creds.json
-        ${{ inputs.credentials }}
-        EOT
-        echo "SCCACHE_GCS_KEY_PATH=${{ github.workspace }}/creds.json" >> $GITHUB_ENV
         echo "SCCACHE_GCS_RW_MODE=READ_ONLY" >> $GITHUB_ENV
         echo "SCCACHE_GCS_BUCKET=protobuf-sccache" >> $GITHUB_ENV
-        echo "SCCACHE_GCS_KEY_PREFIX=\"${{ inputs.cache-prefix }}\"" >> $GITHUB_ENV
+        echo "SCCACHE_GCS_KEY_PREFIX=${{ inputs.cache-prefix }}" >> $GITHUB_ENV
 
     # Only trusted runs should have write access to our caches.
     - name: Disable sccache cache writing
@@ -66,7 +62,7 @@ runs:
     - name: Configure sccache cmake arguments
       shell: bash
       run: |
-        echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=$(which sccache || echo 'sccache') -DCMAKE_CXX_COMPILER_LAUNCHER=$(which sccache || echo 'sccache')" >> $GITHUB_ENV
+        echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
         which sccache || echo "No local ccache installation found"
         sccache --version || echo "No local ccache installation found"
 

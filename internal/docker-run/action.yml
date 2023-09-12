@@ -86,10 +86,13 @@ runs:
       run: >
         time docker run ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
         -e SCCACHE_LOG=debug
-        -e SCCACHE_START_SERVER=1
-        -e SCCACHE_NO_DAEMON=1
+        -e SCCACHE_ERROR_LOG=/workspace/sccache_log.txt
         -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
         -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
         -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX
         -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH || echo "unknown")
         ${{ inputs.image }} ${{ inputs.command }}
+
+    - name: sccache debug logs
+      shell: bash
+      run: cat sccache_log.txt || echo "No sccache found"

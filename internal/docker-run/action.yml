@@ -85,6 +85,9 @@ runs:
       shell: bash
       run: >
         time docker run ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
+        -e SCCACHE_LOG=debug
+        -e SCCACHE_START_SERVER=1
+        -e SCCACHE_NO_DAEMON=1
         -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
         -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
         -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX

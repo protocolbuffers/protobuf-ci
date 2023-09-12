@@ -1,0 +1,88 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 'Setup sccache'
+description: 'Setup sccache for Protobuf CI testing'
+inputs:
+  credentials:
+    required: true
+    description: The GCP credentials to use for caching
+    type: string
+  cache-prefix:
+    required: true
+    description: A unique prefix to prevent cache pollution
+    type: string
+  docker:
+    required: false
+    description: Whether or not to configure for a docker image
+    type: boolean
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Symlink current Actions repo
+      env:
+        GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
+        GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
+      shell: bash
+      run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
+
+    - name: Configure sccache environment variables
+      shell: bash
+      run: echo "SCCACHE_CONFIG=${{ github.workspace }}/sccache-config" >> $GITHUB_ENV
+
+    - name: Configure sccache configuration
+      shell: bash
+      run: |
+        echo "[cache.gcs]" >> $SCCACHE_CONFIG
+        echo "bucket=\"protobuf-sccache\"" >> $SCCACHE_CONFIG
+        echo "key_prefix=\"${{ inputs.cache-prefix }} \"" >> $SCCACHE_CONFIG
+
+    # External runs should never write to our caches.
+    - name: Disable sccache cache writing
+      if: ${{ github.event_name != 'pull_request_target' }}
+      shell: bash
+      run: echo "rw_mode=\"READ_WRITE\"" >> $SCCACHE_CONFIG
+
+    # Setup credentials file
+    - name: Authenticate GCloud
+      id: auth
+      uses: ./../../_actions/current/internal/gcloud-auth
+      with:
+        credentials: ${{ inputs.credentials }}
+    - name: Docker credentials files
+      if: ${{ inputs.docker }}
+      shell: bash
+      run: echo "/workspace/$(basename ${{ steps.auth.outputs.credentials-file }})" >> $SCCACHE_CONFIG
+    - name: Docker credentials files
+      if: ${{ !inputs.docker }}
+      shell: bash
+      run: echo "${{ steps.auth.outputs.credentials-file }}" >> $SCCACHE_CONFIG
+
+    - name: Setup sccache on Mac
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      run: brew install sccache
+
+    - name: Configure sccache cmake arguments
+      shell: bash
+      run: |
+        echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=$(which sccache || echo 'sccache') -DCMAKE_CXX_COMPILER_LAUNCHER=$(which sccache || echo 'sccache')" >> $GITHUB_ENV
+        which sccache || echo "No local ccache installation found"
+        sccache --version || echo "No local ccache installation found"
+
+    - name: Zero out sccache
+      if: ${{ runner.os != 'Linux' }}
+      shell: bash
+      run: sccache -z

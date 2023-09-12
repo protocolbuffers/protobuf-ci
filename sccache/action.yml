@@ -23,10 +23,6 @@ inputs:
     required: true
     description: A unique prefix to prevent cache pollution
     type: string
-  docker:
-    required: false
-    description: Whether or not to configure for a docker image
-    type: boolean
 
 runs:
   using: 'composite'
@@ -38,37 +34,31 @@ runs:
       shell: bash
       run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
-    - name: Configure sccache environment variables
-      shell: bash
-      run: echo "SCCACHE_CONFIG=${{ github.workspace }}/sccache-config" >> $GITHUB_ENV
-
-    - name: Configure sccache configuration
-      shell: bash
-      run: |
-        echo "[cache.gcs]" >> $SCCACHE_CONFIG
-        echo "bucket=\"protobuf-sccache\"" >> $SCCACHE_CONFIG
-        echo "key_prefix=\"${{ inputs.cache-prefix }} \"" >> $SCCACHE_CONFIG
-
-    # External runs should never write to our caches.
-    - name: Disable sccache cache writing
-      if: ${{ github.event_name != 'pull_request_target' }}
-      shell: bash
-      run: echo "rw_mode=\"READ_WRITE\"" >> $SCCACHE_CONFIG
-
     # Setup credentials file
     - name: Authenticate GCloud
       id: auth
       uses: ./../../_actions/current/internal/gcloud-auth
       with:
         credentials: ${{ inputs.credentials }}
-    - name: Docker credentials files
-      if: ${{ inputs.docker }}
+
+    - name: Configure sccache environment variables
       shell: bash
-      run: echo "/workspace/$(basename ${{ steps.auth.outputs.credentials-file }})" >> $SCCACHE_CONFIG
-    - name: Docker credentials files
-      if: ${{ !inputs.docker }}
+      run: |
+        echo "SCCACHE_CONF=${{ github.workspace }}/sccache-config" >> $GITHUB_ENV
+        echo "SCCACHE_GCS_KEY_PATH=${{ steps.auth.outputs.credentials-file }}" >> $GITHUB_ENV
+
+    - name: Configure sccache
       shell: bash
-      run: echo "${{ steps.auth.outputs.credentials-file }}" >> $SCCACHE_CONFIG
+      run: |
+        echo "[cache.gcs]" >> $SCCACHE_CONFIG
+        echo "bucket=\"protobuf-sccache\"" >> $SCCACHE_CONFIG
+        echo "key_prefix=\"${{ inputs.cache-prefix }} \"" >> $SCCACHE_CONFIG
+
+    # Only trusted runs should have write access to our caches.
+    - name: Disable sccache cache writing
+      if: ${{ github.event_name != 'pull_request_target' }}
+      shell: bash
+      run: echo "rw_mode=\"READ_WRITE\"" >> $SCCACHE_CONFIG
 
     - name: Setup sccache on Mac
       if: ${{ runner.os == 'macOS' }}

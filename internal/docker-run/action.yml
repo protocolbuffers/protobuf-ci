@@ -88,5 +88,5 @@ runs:
         -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
         -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
         -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX
-        -e GOOGLE_APPLICATION_CREDENTIALS=/workspace/$(basename $GOOGLE_APPLICATION_CREDENTIALS || echo "unknown")
+        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH || echo "unknown")
         ${{ inputs.image }} ${{ inputs.command }}

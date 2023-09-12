@@ -15,6 +15,10 @@
 name: 'Setup sccache'
 description: 'Setup sccache for Protobuf CI testing'
 inputs:
+  credentials:
+    required: true
+    description: The GCP credentials to use for caching
+    type: string
   cache-prefix:
     required: true
     description: A unique prefix to prevent cache pollution
@@ -28,9 +32,24 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Symlink current Actions repo
+      env:
+        GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
+        GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
+      shell: bash
+      run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
+
+    # Setup credentials file
+    - name: Authenticate GCloud
+      id: auth
+      uses: ./../../_actions/current/internal/gcloud-auth
+      with:
+        credentials: ${{ inputs.credentials }}
+
     - name: Configure sccache environment variables
       shell: bash
       run: |
+        echo "SCCACHE_GCS_KEY_PATH=${{ steps.auth.outputs.credentials-file }}" >> $GITHUB_ENV
         echo "SCCACHE_GCS_RW_MODE=READ_ONLY" >> $GITHUB_ENV
         echo "SCCACHE_GCS_BUCKET=protobuf-sccache" >> $GITHUB_ENV
         echo "SCCACHE_GCS_KEY_PREFIX=${{ inputs.cache-prefix }}" >> $GITHUB_ENV
@@ -53,3 +72,8 @@ runs:
         echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
         which sccache || echo "No local ccache installation found"
         sccache --version || echo "No local ccache installation found"
+
+    - name: Zero out sccache
+      if: ${{ runner.os != 'Linux' }}
+      shell: bash
+      run: sccache -z

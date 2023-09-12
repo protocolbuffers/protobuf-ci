@@ -42,6 +42,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Validate cache name
+      if: contains(inputs.cache-prefix, '+') || contains(inputs.cache-prefix, ' ')
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('Cache prefixes can't contain symbols or spaces.')
+
     - name: Symlink current Actions repo
       env:
         GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/

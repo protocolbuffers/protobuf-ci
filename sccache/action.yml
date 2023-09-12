@@ -60,8 +60,3 @@ runs:
         echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
         which sccache || echo "No local ccache installation found"
         sccache --version || echo "No local ccache installation found"
-
-    - name: Zero out sccache
-      if: ${{ runner.os != 'Linux' }}
-      shell: bash
-      run: sccache -z

@@ -28,13 +28,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Symlink current Actions repo
-      env:
-        GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
-        GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
-      shell: bash
-      run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
-
     - name: Configure sccache environment variables
       shell: bash
       run: |

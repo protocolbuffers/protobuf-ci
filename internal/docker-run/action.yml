@@ -85,14 +85,8 @@ runs:
       shell: bash
       run: >
         time docker run ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
-        -e SCCACHE_LOG=debug
-        -e SCCACHE_ERROR_LOG=/workspace/sccache_log.txt
         -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
         -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
         -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX
         -e GOOGLE_APPLICATION_CREDENTIALS=/workspace/$(basename $GOOGLE_APPLICATION_CREDENTIALS || echo "unknown")
         ${{ inputs.image }} ${{ inputs.command }}
-
-    - name: sccache debug logs
-      shell: bash
-      run: cat sccache_log.txt || echo "No sccache found"

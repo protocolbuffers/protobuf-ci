@@ -86,5 +86,5 @@ runs:
       run: >
         time docker run ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
         ${{ inputs.image }} ${{ inputs.command }}
-        -e SCCACHE_CONF=/workspace/$(basename $SCCACHE_CONF || "missing")
-        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH || "missing")
+        -e SCCACHE_CONF=/workspace/$(basename $SCCACHE_CONF || "unknown")
+        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH || "unknown")

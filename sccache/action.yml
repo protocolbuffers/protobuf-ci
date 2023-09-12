@@ -55,6 +55,11 @@ runs:
       shell: bash
       run: echo "SCCACHE_GCS_RW_MODE=READ_WRITE" >> $GITHUB_ENV
 
+    - name: Install sccache on non-Linux machines
+      if: ${{ runner.os != 'Linux' }}
+      shell: bash
+      run: cargo install --locked sccache
+
     - name: Configure sccache cmake arguments
       shell: bash
       run: |

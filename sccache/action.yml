@@ -25,7 +25,7 @@ inputs:
     type: string
   version:
     required: false
-    default: 'v0.5.2'
+    default: 'v0.5.4'
     description: The version of sccache to use
     type: string
 

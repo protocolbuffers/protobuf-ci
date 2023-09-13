@@ -85,4 +85,8 @@ runs:
       shell: bash
       run: >
         time docker run ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
+        -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
+        -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
+        -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX
+        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH || echo "unknown")
         ${{ inputs.image }} ${{ inputs.command }}

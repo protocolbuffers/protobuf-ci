@@ -54,7 +54,7 @@ runs:
         GH_ACTION_DIR: ${{ github.workspace }}/../../_actions/${{ github.action_repository }}/${{ github.action_ref }}/
         GH_ACTION_CLONE: ${{ github.workspace }}/../../_actions/current
       shell: bash
-      run: ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
+      run: rm -rf $GH_ACTION_CLONE && ln -fs $GH_ACTION_DIR $GH_ACTION_CLONE
 
     - name: Authenticate
       id: auth

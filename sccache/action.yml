@@ -85,7 +85,7 @@ runs:
     - name: Configure sccache cmake arguments
       shell: bash
       run: |
-        echo "SCCACHE_CMAKE_FLAGS=-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
+        echo "SCCACHE_CMAKE_FLAGS=-Dprotobuf_ALLOW_CCACHE=ON -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
         which sccache || echo "No local ccache installation found"
         sccache --version || echo "No local ccache installation found"
 

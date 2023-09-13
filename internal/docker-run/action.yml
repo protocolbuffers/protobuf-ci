@@ -83,18 +83,19 @@ runs:
 
     - name: Forward sccache arguments
       shell: bash
+      id: sccache
       if: ${{ env.SCCACHE_GCS_KEY_PATH != '' }}
       run: >
-        echo "SCCACHE_DOCKER_ARGS=(
+        echo "args="
         -e SCCACHE_GCS_RW_MODE=$SCCACHE_GCS_RW_MODE
         -e SCCACHE_GCS_BUCKET=$SCCACHE_GCS_BUCKET
         -e SCCACHE_GCS_KEY_PREFIX=$SCCACHE_GCS_KEY_PREFIX
-        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH) )
-        " >> $GITHUB_ENV
+        -e SCCACHE_GCS_KEY_PATH=/workspace/$(basename $SCCACHE_GCS_KEY_PATH)
+        "" >> $GITHUB_OUTPUT
 
     - name: Run docker
       shell: bash
       run: >
-        time docker run "${SCCACHE_DOCKER_ARGS[@]}"
+        time docker run ${{ steps.sccache.outputs.args }}
         ${{ inputs.run-flags}} -v${{ github.workspace }}:/workspace
         ${{ inputs.image }} ${{ inputs.command }}

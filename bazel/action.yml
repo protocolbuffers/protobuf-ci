@@ -84,44 +84,54 @@ runs:
     - name: Get Linux bazelisk path
       if: runner.os == 'Linux'
       shell: bash
-      run: echo "BAZELISK_PATH=~/.cache/bazelisk" >> $GITHUB_ENV
+      run: echo "BAZELISK_PATH=$HOME/.cache/bazelisk" >> $GITHUB_ENV
 
     - name: Get MacOS bazelisk path
       if: runner.os == 'macOS'
       shell: bash
-      run: echo "BAZELISK_PATH=~/Library/Caches/bazelisk" >> $GITHUB_ENV
+      run: echo "BAZELISK_PATH=$HOME/Library/Caches/bazelisk" >> $GITHUB_ENV
 
     - name: Get Windows bazelisk path
       if: runner.os == 'Windows'
       shell: bash
-      run: echo "BAZELISK_PATH=$LOCALAPPDATA\bazelisk" >> $GITHUB_ENV
+      run: echo "BAZELISK_PATH=$LOCALAPPDATA/bazelisk" >> $GITHUB_ENV
 
     - name: Print cache
       if: runner.os == 'Windows'
       shell: bash
-      run: echo "BAZELISK_PATH=$LOCALAPPDATA\bazelisk" >> $GITHUB_ENV
+      run: echo "BAZELISK_PATH=$LOCALAPPDATA/bazelisk" >> $GITHUB_ENV
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH || echo "Not found"
+      run: |
+        find /home/runner/.cache/bazelisk || echo "Not found"
+        find ~/runner || echo "Not found"
+        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
+        find ~/Library/Caches/bazelisk || echo "Not found"
+        find $BAZELISK_PATH || echo "Not found"
 
     - name: Cache Bazelisk
-      if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
+      #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ env.BAZELISK_PATH }}
         key: bazel-${{ runner.os }}-${{ inputs.version }}
 
-    - name: Restore Bazelisk
-      if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
-      uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
-      with:
-        path: ${{ env.BAZELISK_PATH }}
-        key: bazel-${{ runner.os }}-${{ inputs.version}}
+    #- name: Restore Bazelisk
+    #  if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
+    #  uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+    #  with:
+    #    path: ${{ env.BAZELISK_PATH }}
+    #    key: bazel-${{ runner.os }}-${{ inputs.version}}
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH || echo "Not found"
+      run: |
+        find /home/runner/.cache/bazelisk || echo "Not found"
+        find ~/runner || echo "Not found"
+        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
+        find ~/Library/Caches/bazelisk || echo "Not found"
+        find $BAZELISK_PATH || echo "Not found"
 
     - name: Hook up repository Cache
       shell: bash
@@ -142,7 +152,12 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH || echo "Not found"
+      run: |
+        find /home/runner/.cache/bazelisk || echo "Not found"
+        find ~/runner || echo "Not found"
+        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
+        find ~/Library/Caches/bazelisk || echo "Not found"
+        find $BAZELISK_PATH || echo "Not found"
 
     - name: Run Bash
       if: ${{ inputs.bash }}
@@ -155,6 +170,15 @@ runs:
         bazelisk ${{ steps.bazel.outputs.bazel-startup-flags }}
         ${{ inputs.bazel }} $BAZEL_FLAGS ${{ inputs.exclude-targets && format('-- {0}', inputs.exclude-targets) || '' }}
       shell: bash
+
+    - name: Print Bazelisk Cache
+      shell: bash
+      run: |
+        find /home/runner/.cache/bazelisk || echo "Not found"
+        find ~/runner || echo "Not found"
+        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
+        find ~/Library/Caches/bazelisk || echo "Not found"
+        find $BAZELISK_PATH || echo "Not found"
 
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.

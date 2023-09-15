@@ -94,21 +94,15 @@ runs:
     - name: Get Windows bazelisk path
       if: runner.os == 'Windows'
       shell: bash
-      run: echo "BAZELISK_PATH=$LOCALAPPDATA/bazelisk" >> $GITHUB_ENV
+      run: echo "BAZELISK_PATH=$LOCALAPPDATA\\bazelisk" >> $GITHUB_ENV
 
-    - name: Print cache
-      if: runner.os == 'Windows'
+    - name: Echo Bazelisk Cache path
       shell: bash
-      run: echo "BAZELISK_PATH=$LOCALAPPDATA/bazelisk" >> $GITHUB_ENV
+      run: echo $BAZELISK_PATH
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: |
-        find /home/runner/.cache/bazelisk || echo "Not found"
-        find ~/runner || echo "Not found"
-        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
-        find ~/Library/Caches/bazelisk || echo "Not found"
-        find $BAZELISK_PATH || echo "Not found"
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Cache Bazelisk
       #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
@@ -126,12 +120,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: |
-        find /home/runner/.cache/bazelisk || echo "Not found"
-        find ~/runner || echo "Not found"
-        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
-        find ~/Library/Caches/bazelisk || echo "Not found"
-        find $BAZELISK_PATH || echo "Not found"
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Hook up repository Cache
       shell: bash
@@ -152,12 +141,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: |
-        find /home/runner/.cache/bazelisk || echo "Not found"
-        find ~/runner || echo "Not found"
-        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
-        find ~/Library/Caches/bazelisk || echo "Not found"
-        find $BAZELISK_PATH || echo "Not found"
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Run Bash
       if: ${{ inputs.bash }}
@@ -173,12 +157,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: |
-        find /home/runner/.cache/bazelisk || echo "Not found"
-        find ~/runner || echo "Not found"
-        find /Users/runner/Library/Caches/bazelisk || echo "Not found"
-        find ~/Library/Caches/bazelisk || echo "Not found"
-        find $BAZELISK_PATH || echo "Not found"
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Save Bazel repository cache
       # Only allow repository cache updates during post-submits.

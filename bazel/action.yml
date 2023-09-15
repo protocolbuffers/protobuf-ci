@@ -96,6 +96,15 @@ runs:
       shell: bash
       run: echo "BAZELISK_PATH=$LOCALAPPDATA\bazelisk" >> $GITHUB_ENV
 
+    - name: Print cache
+      if: runner.os == 'Windows'
+      shell: bash
+      run: echo "BAZELISK_PATH=$LOCALAPPDATA\bazelisk" >> $GITHUB_ENV
+
+    - name: Print Bazelisk Cache
+      shell: bash
+      run: find $BAZELISK_PATH
+
     - name: Cache Bazelisk
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
       uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
@@ -109,6 +118,10 @@ runs:
       with:
         path: ${{ env.BAZELISK_PATH }}
         key: bazel-${{ runner.os }}-${{ inputs.version}}
+
+    - name: Print Bazelisk Cache
+      shell: bash
+      run: find $BAZELISK_PATH
 
     - name: Hook up repository Cache
       shell: bash
@@ -126,6 +139,10 @@ runs:
     - name: Output Bazel version
       shell: bash
       run: bazelisk version
+
+    - name: Print Bazelisk Cache
+      shell: bash
+      run: find $BAZELISK_PATH
 
     - name: Run Bash
       if: ${{ inputs.bash }}

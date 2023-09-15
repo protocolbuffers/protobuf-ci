@@ -103,7 +103,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Cache Bazelisk
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
@@ -121,7 +121,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Hook up repository Cache
       shell: bash
@@ -142,7 +142,7 @@ runs:
 
     - name: Print Bazelisk Cache
       shell: bash
-      run: find $BAZELISK_PATH
+      run: find $BAZELISK_PATH || echo "Not found"
 
     - name: Run Bash
       if: ${{ inputs.bash }}

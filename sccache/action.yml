@@ -57,6 +57,7 @@ runs:
       run: |
         echo "SCCACHE_LOG=debug" >> $GITHUB_ENV
         echo "SCCACHE_GCS_KEY_PATH=${{ steps.auth.outputs.credentials-file }}" >> $GITHUB_ENV
+        echo "SCCACHE_GCS_RW_MODE=READ_WRITE" >> $GITHUB_ENV
         echo "SCCACHE_GCS_BUCKET=protobuf-sccache" >> $GITHUB_ENV
         echo "SCCACHE_GCS_KEY_PREFIX=${{ inputs.cache-prefix }}" >> $GITHUB_ENV
 

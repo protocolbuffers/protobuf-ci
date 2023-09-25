@@ -1,0 +1,42 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 'Github Checkout'
+description: 'Check out a Github repository'
+inputs:
+  ref:
+    required: true
+    description: "The branch, tag or SHA to checkout"
+  submodules:
+    required: false
+    description: "Whether or not to checkout submodules"
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout pending changes
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      with:
+        ref: ${{ inputs.ref }}
+
+    - name: Checkout submodules
+      if: ${{ inputs.submodules }}
+      uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd # v2.8.3
+      with:
+        timeout_seconds: 30
+        retry_wait_seconds: 30
+        max_attempts: 5
+        shell: bash
+        command: |
+          git submodule update --init ${{ inputs.submodules == 'recursive' && '--recursive' || '' }}

@@ -58,6 +58,7 @@ runs:
         echo "SCCACHE_GCS_KEY_PATH=${{ steps.auth.outputs.credentials-file }}" >> $GITHUB_ENV
         echo "SCCACHE_GCS_BUCKET=protobuf-sccache" >> $GITHUB_ENV
         echo "SCCACHE_GCS_KEY_PREFIX=${{ inputs.cache-prefix }}" >> $GITHUB_ENV
+        echo "SCCACHE_IDLE_TIMEOUT=0" >> $GITHUB_ENV
 
     # Only trusted runs should have write access to our caches.
     - name: Enable sccache cache writing
@@ -71,6 +72,16 @@ runs:
       uses: mozilla-actions/sccache-action@8417cffc2ec64127ad83077aceaa8631f7cdc83e # v0.0.3
       with:
         version: ${{ inputs.version }}
+
+    - name: Warm-up sccache server (non-docker)
+      if: ${{ runner.os != 'Linux' }}
+      uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd # v2.8.3
+      with:
+        timeout_minutes: 5
+        retry_wait_seconds: 60
+        max_attempts: 5
+        shell: bash
+        command: sccache --start-server
 
     - name: Configure sccache cmake arguments
       shell: bash

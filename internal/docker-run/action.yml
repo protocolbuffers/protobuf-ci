@@ -81,8 +81,8 @@ runs:
       uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd # v2.8.3
       with:
         timeout_minutes: 5
-        retry_wait_seconds: 30
-        max_attempts: 3
+        retry_wait_seconds: 60
+        max_attempts: 5
         shell: bash
         command: time docker pull -q ${{ inputs.image }}
 

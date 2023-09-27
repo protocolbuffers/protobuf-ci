@@ -39,4 +39,4 @@ runs:
         max_attempts: 5
         shell: bash
         command: |
-          git submodule update --init ${{ inputs.submodules == 'recursive' && '--recursive' || '' }}
+          git submodule update --force --init ${{ inputs.submodules == 'recursive' && '--recursive' || '' }}

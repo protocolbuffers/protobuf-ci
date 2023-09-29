@@ -26,6 +26,7 @@ runs:
 
     - name: Install bazelrc files
       shell: bash
-      run: |
-        cp ci/*.bazelrc .
-        cp -f ${{ runner.os }}.bazelrc .bazelrc
+      run: >
+        cp -f ci/*.bazelrc .
+        && cp -f ${{ runner.os }}.bazelrc .bazelrc
+        || echo "No ci folder found"

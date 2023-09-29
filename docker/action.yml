@@ -65,6 +65,12 @@ runs:
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
 
+    - name: Authenticate
+      if: ${{ inputs.skip-staleness-check }}
+      uses: ./../../_actions/current/internal/gcloud-auth
+      with:
+        credentials: ${{ inputs.credentials }}
+
     - name: Generate docker platform flags
       if: inputs.platform
       shell: bash

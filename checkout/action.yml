@@ -39,4 +39,6 @@ runs:
         max_attempts: 5
         shell: bash
         command: |
+          git submodule deinit --all -f
+          git submodule sync
           git submodule update --force --init ${{ inputs.submodules == 'recursive' && '--recursive' || '' }}

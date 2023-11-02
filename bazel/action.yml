@@ -82,7 +82,7 @@ runs:
     - name: Select default Bazel version
       if: runner.os != 'macOS'
       shell: bash
-      run: echo "BAZEL_VERSION=${{ inputs.version || '5.1.1' }}" >> $GITHUB_ENV
+      run: echo "BAZEL_VERSION=${{ inputs.version || '5.4.0' }}" >> $GITHUB_ENV
 
     - name: Get Linux bazelisk path
       if: runner.os == 'Linux'

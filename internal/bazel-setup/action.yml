@@ -88,6 +88,11 @@ runs:
       with:
         bazel-cache: ${{ inputs.bazel-cache }}
 
+    - name: Setup xcode
+      if: runner.os == 'macOS'
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
     - name: Clear Bazel bazel-cache
       if: runner.os == 'macOS'
       shell: bash

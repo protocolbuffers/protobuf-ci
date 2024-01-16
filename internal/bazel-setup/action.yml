@@ -87,3 +87,8 @@ runs:
       uses: ./../../_actions/current/internal/repository-cache-restore
       with:
         bazel-cache: ${{ inputs.bazel-cache }}
+
+    - name: Clear Bazel bazel-cache
+      if: runner.os == "macOS"
+      shell: bash
+      run: bazelisk clean --expunge

@@ -89,6 +89,6 @@ runs:
         bazel-cache: ${{ inputs.bazel-cache }}
 
     - name: Clear Bazel bazel-cache
-      if: runner.os == "macOS"
+      if: runner.os == 'macOS'
       shell: bash
       run: bazelisk clean --expunge

@@ -58,7 +58,6 @@ runs:
       shell: bash
       run: |
         echo "BAZEL_FLAGS=$BAZEL_FLAGS --xcode_version_config=@com_google_protobuf//.github:host_xcodes" >> $GITHUB_ENV
-        echo "DEVELOPER_DIR=${{ env.DEVELOPER_DIR || '/Applications/Xcode_14.1.app/Contents/Developer' }}" >> $GITHUB_ENV
 
     - name: Configure Bazel caching
       # Skip bazel cache for local act runs due to issue with credential files

@@ -43,6 +43,8 @@ runs:
 
     - name: Restore Bazel repository cache
       id: restore-cache
+      # Skip if there's already a downloaded cache
+      if: ${{ hashFiles(format('{0}/{1}', github.workspace, env.REPOSITORY_CACHE_PATH)) != '' }}
       uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
       with:
         path: ${{ github.workspace }}/${{ env.REPOSITORY_CACHE_PATH }}

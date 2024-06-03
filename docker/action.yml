@@ -60,7 +60,7 @@ runs:
       if: ${{ !inputs.skip-staleness-check }}
       uses: ./../../_actions/current/bazel-docker
       with:
-        image: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:6.3.0-91a0ac83e968068672bc6001a4d474cfd9a50f1d
+        image: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:7.1.2-8ae66c8e49db9a3db7ed62424524e63bab7a96e5
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS

@@ -64,6 +64,7 @@ runs:
 
     - name: Calculate Image Hash
       id: image-hash
+      shell: bash
       run: echo ::set-output name=value::$(echo ${{ inputs.image }} | md5sum | cut -f1 -d" ")
 
     - name: Setup Bazel

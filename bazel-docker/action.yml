@@ -62,12 +62,16 @@ runs:
     - name: Setup Runner
       uses: ./../../_actions/current/internal/setup-runner
 
+    - name: Calculate Image Hash
+      id: image-hash
+      run: echo ::set-output name=value::$(echo ${{ inputs.image }} | md5sum | cut -f1 -d" ")
+
     - name: Setup Bazel
       id: bazel
       uses: ./../../_actions/current/internal/bazel-setup
       with:
         credentials-file: /workspace/$(basename ${{ steps.auth.outputs.credentials-file }})
-        bazel-cache: ${{ inputs.bazel-cache }}
+        bazel-cache: ${{ inputs.bazel-cache }}-${{ steps.image-hash.outputs.value }}
 
     - name: Hook up repository Cache
       shell: bash

@@ -42,6 +42,14 @@ inputs:
     required: false
     description: "Specify extra flags for docker run"
     type: string
+  staleness-image:
+    required: true
+    description: "The docker image used to regenerate staleness files"
+    type: string
+  bazel-version:
+    required: true
+    description: Bazel version to use
+    type: string
 
 runs:
   using: 'composite'
@@ -60,7 +68,7 @@ runs:
       if: ${{ !inputs.skip-staleness-check }}
       uses: ./../../_actions/current/bazel-docker
       with:
-        image: us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:7.1.2-cf84e92285ca133b9c8104ad7b14d70e953cbb8e
+        image: ${{ inputs.staleness-image }}
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS

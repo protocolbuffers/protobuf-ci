@@ -51,9 +51,6 @@ runs:
       # Most tests don't require this, so just continue if there's a network issue.
       continue-on-error: true
       uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2.2.0
-      # with:
-      #   # This is mirrored for better reliability.
-      #   image: us-docker.pkg.dev/protobuf-build/containers/test/binfmt@sha256:cf38696ffb9927c3433ad496a715b12ca94e67e67e9729ddf5dedbdb37e53b4d
 
     - name: Check docker cache
       if: ${{ inputs.docker-cache }}

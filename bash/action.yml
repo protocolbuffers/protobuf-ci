@@ -23,8 +23,9 @@ inputs:
     required: true
     description: A command to run in the docker image
   bazel-version:
-    required: true
+    required: false
     description: Bazel version to use
+    default: "6.4.0"
     type: string
 
 runs:

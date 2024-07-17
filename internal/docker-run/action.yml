@@ -51,7 +51,7 @@ runs:
       # Most tests don't require this, so just continue if there's a network issue.
       continue-on-error: true
       uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2.1.0
-        with:
+      with:
         # This is mirrored for better reliability.
         image: us-docker.pkg.dev/protobuf-build/containers/test/binfmt@sha256:cf38696ffb9927c3433ad496a715b12ca94e67e67e9729ddf5dedbdb37e53b4d
 

@@ -29,7 +29,7 @@ inputs:
   version:
     required: false
     description: A pinned Bazel version to use
-    default: '6.3.0'
+    default: '6.4.0'
     type: string
   bazel:
     required: false

@@ -22,6 +22,11 @@ inputs:
   command:
     required: true
     description: A command to run in the docker image
+  bazel-version:
+    required: false
+    description: Bazel version to use
+    default: "6.4.0"
+    type: string
 
 runs:
   using: 'composite'
@@ -42,6 +47,7 @@ runs:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
+        version: ${{ inputs.bazel-version }}
 
     - name: Run
       shell: bash

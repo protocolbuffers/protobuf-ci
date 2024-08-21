@@ -129,7 +129,9 @@ runs:
 
     - name: Run Bash
       if: ${{ inputs.bash }}
-      run: ${{ inputs.bash }}
+      run: |
+        set -ex
+        ${{ inputs.bash }}
       shell: bash
 
     - name: Run Bazel

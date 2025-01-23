@@ -27,7 +27,7 @@ runs:
   steps:
     - name: Save modified Bazel repository cache
       if: ${{ env.REPOSITORY_CACHE_HASH != hashFiles(format('{0}/**', env.REPOSITORY_CACHE_PATH)) }}
-      uses: actions/cache/save@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: ${{ github.workspace }}/${{ env.REPOSITORY_CACHE_PATH }}
         key: ${{ env.REPOSITORY_CACHE_BASE }}-${{ github.sha }}

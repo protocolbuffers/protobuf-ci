@@ -98,14 +98,14 @@ runs:
 
     - name: Cache Bazelisk
       if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_target' }}
-      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: ${{ env.BAZELISK_PATH }}
         key: bazel-${{ runner.os }}-${{ inputs.version }}
 
     - name: Restore Bazelisk
       if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
-      uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: ${{ env.BAZELISK_PATH }}
         key: bazel-${{ runner.os }}-${{ inputs.version}}

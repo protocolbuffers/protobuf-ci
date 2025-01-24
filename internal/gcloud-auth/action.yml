@@ -31,10 +31,12 @@ runs:
     - name: Authenticate to Google Cloud
       id: auth
       uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # v1.0.0
+      if: ${{ env.CREDENTIALS_FILE == '' }}
       with:
         credentials_json: ${{ inputs.credentials }}
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@e30db14379863a8c79331b04a9969f4c1e225e0b # v1.1.1
+      if: ${{ env.CREDENTIALS_FILE == '' }}
       with:
         version: ">= 446.0.0"
     - name: Use gcloud CLI
@@ -42,6 +44,7 @@ runs:
       run: gcloud info
 
     - name: Store credentials path
+      if: ${{ env.CREDENTIALS_FILE == '' }}
       shell: bash
       run: echo "CREDENTIALS_FILE=${{ steps.auth.outputs.credentials_file_path }}" >> $GITHUB_ENV
 

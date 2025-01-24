@@ -45,7 +45,7 @@ runs:
       id: restore-cache
       # Skip if there's already a downloaded cache
       if: ${{ hashFiles(format('{0}/{1}', github.workspace, env.REPOSITORY_CACHE_PATH)) == '' }}
-      uses: actions/cache/restore@627f0f41f6904a5b1efbaed9f96d9eb58e92e920 # v3.2.4
+      uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: ${{ github.workspace }}/${{ env.REPOSITORY_CACHE_PATH }}
         key: ${{ env.REPOSITORY_CACHE_NAME }}

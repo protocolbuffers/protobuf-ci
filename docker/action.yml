@@ -73,6 +73,7 @@ runs:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
+        version: ${{ inputs.bazel-version }}
 
     - name: Authenticate
       if: ${{ inputs.skip-staleness-check }}

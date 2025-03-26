@@ -52,8 +52,8 @@ runs:
       continue-on-error: true
       uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2.1.0
       with:
-        # This is mirrored for better reliability.
-        image: us-docker.pkg.dev/protobuf-build/containers/test/binfmt@sha256:cf38696ffb9927c3433ad496a715b12ca94e67e67e9729ddf5dedbdb37e53b4d
+        # This is mirrored from tonistiigi/binfmt:qemu-v9.2.0 for better reliability.
+        image: us-docker.pkg.dev/protobuf-build/containers/test/binfmt@sha256:10d6fc4cc07629be6d9960ae427535ea2e6ceec57206cafc5471e3476141a46f
 
     - name: Check docker cache
       if: ${{ inputs.docker-cache }}

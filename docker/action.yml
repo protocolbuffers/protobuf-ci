@@ -47,10 +47,6 @@ inputs:
     description: "The docker image used to regenerate staleness files"
     default: "us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:7.1.2-bec4e87effd62da1d4f9a13d377e37bcb80376c9"
     type: string
-  bazel-version:
-    required: false
-    description: Bazel version to use
-    type: string
 
 runs:
   using: 'composite'
@@ -73,7 +69,6 @@ runs:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
-        version: ${{ inputs.bazel-version }}
 
     - name: Authenticate
       if: ${{ inputs.skip-staleness-check }}

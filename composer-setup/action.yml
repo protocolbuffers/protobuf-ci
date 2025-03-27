@@ -29,7 +29,7 @@ runs:
     # This is the trusted path, which can upload to our cache.
     - name: Cache Composer dependencies
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf  # v4.2.2
       with:
         path: ${{ github.workspace }}/composer-cache
         key: composer-${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/composer.json', inputs.directory)) }}

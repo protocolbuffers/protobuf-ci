@@ -38,7 +38,7 @@ runs:
   steps:
     - name: Validate Docker image
       if: ${{ github.event_name == 'pull_request_target' && contains(inputs.image, 'us-docker.pkg.dev/protobuf-build/release-containers/') }}
-      uses: actions/github-script@v3
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
       with:
         script: |
           core.setFailed('Pull requests from forks cannot use release Docker images.')
@@ -50,7 +50,7 @@ runs:
     - name: Setup QEMU for possible emulation
       # Most tests don't require this, so just continue if there's a network issue.
       continue-on-error: true
-      uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2.1.0
+      uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392  # v3.6.0
       with:
         # This is mirrored from tonistiigi/binfmt:qemu-v9.2.0 for better reliability.
         image: us-docker.pkg.dev/protobuf-build/containers/test/binfmt@sha256:10d6fc4cc07629be6d9960ae427535ea2e6ceec57206cafc5471e3476141a46f
@@ -58,7 +58,7 @@ runs:
     - name: Check docker cache
       if: ${{ inputs.docker-cache }}
       id: check-docker-cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf  # v4.2.2
       with:
         path: ci/docker/
         key: ${{ inputs.image }}
@@ -79,7 +79,7 @@ runs:
     - name: Pull fresh docker image
       if: ${{ !inputs.docker-cache }}
       id: docker-pull
-      uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd # v2.8.3
+      uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08  # v3.0.2
       with:
         timeout_minutes: 5
         retry_wait_seconds: 60

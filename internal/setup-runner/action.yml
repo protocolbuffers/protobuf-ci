@@ -22,7 +22,7 @@ runs:
     - name: Fix Windows line breaks
       if: runner.os == 'Windows'
       shell: bash
-      run: find . -type f -print0 | xargs -0 d2u
+      run: find . -type f -print0 | xargs -0 d2u || echo "Ignoring failure"
 
     - name: Install bazelrc files
       shell: bash

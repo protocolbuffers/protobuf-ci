@@ -45,6 +45,10 @@ inputs:
     required: false
     description: "Bazel target patterns to exclude. Each pattern must be prefixed with a minus sign."
     type: string
+  bazel-flags:
+    required: false
+    description: Additional bazel flags to use
+    type: string
 
 runs:
   using: 'composite'
@@ -113,6 +117,11 @@ runs:
     - name: Hook up repository Cache
       shell: bash
       run: echo "BAZEL_FLAGS=$BAZEL_FLAGS --repository_cache=$(pwd)/${{ env.REPOSITORY_CACHE_PATH }}" >> $GITHUB_ENV
+
+      # TODO(b/467211650) this shouldn't be necessary, remove it
+    - name: Append additional flags
+      shell: bash
+      run: echo "BAZEL_FLAGS=$BAZEL_FLAGS ${{ inputs.bazel-flags }}" >> $GITHUB_ENV
 
     - name: Validate inputs
       if: ${{ (inputs.bash && inputs.bazel) || (!inputs.bash && !inputs.bazel) }}

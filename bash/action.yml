@@ -27,6 +27,10 @@ inputs:
     description: Bazel version to use
     default: "8.0.1"
     type: string
+  bazel-flags:
+    required: false
+    description: Bazel flags to use
+    type: string
 
 runs:
   using: 'composite'
@@ -47,6 +51,7 @@ runs:
         credentials: ${{ inputs.credentials }}
         bazel-cache: regenerate-stale-files
         bash: ./regenerate_stale_files.sh $BAZEL_FLAGS
+        bazel-flags: ${{ inputs.bazel-flags }}
         version: ${{ inputs.bazel-version }}
 
     - name: Run

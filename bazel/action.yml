@@ -116,7 +116,7 @@ runs:
 
     - name: Hook up repository Cache
       shell: bash
-      run: echo "BAZEL_FLAGS=$BAZEL_FLAGS --repository_cache=$(pwd)/${{ env.REPOSITORY_CACHE_PATH }}" >> $GITHUB_ENV
+      run: echo "BAZEL_FLAGS=$BAZEL_FLAGS --repository_cache=/${{ env.REPOSITORY_CACHE_PATH }}" >> $GITHUB_ENV
 
       # TODO(b/467211650) this shouldn't be necessary, remove it
     - name: Append additional flags

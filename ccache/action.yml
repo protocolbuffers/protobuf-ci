@@ -79,6 +79,7 @@ runs:
         ccache --version || echo "No local ccache installation found"
 
     - name: Setup fixed path ccache caching
+      if: ${{ github.event_name != 'pull_request_target' }}
       uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: |
@@ -91,6 +92,20 @@ runs:
         # 1) The exact same commit we're running over
         # 2) The latest cache from the current ref branch
         # 3) The latest push to the base ref of a pull request
+        restore-keys: |
+          ${{ format('ccache-{0}-{1}-{2}', inputs.cache-prefix, github.ref_name, github.sha) }}
+          ${{ format('ccache-{0}-{1}', inputs.cache-prefix, github.ref_name) }}
+          ${{ format('ccache-{0}-{1}', inputs.cache-prefix, github.base_ref) }}
+
+    - name: Restore fixed path ccache
+      if: ${{ github.event_name == 'pull_request_target' }}
+      uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      with:
+        path: |
+          .ccache/**
+          !.ccache/lock
+          !.ccache/tmp
+        key: ${{ format('ccache-{0}-{1}-{2}', inputs.cache-prefix, github.ref_name, github.sha) }}
         restore-keys: |
           ${{ format('ccache-{0}-{1}-{2}', inputs.cache-prefix, github.ref_name, github.sha) }}
           ${{ format('ccache-{0}-{1}', inputs.cache-prefix, github.ref_name) }}

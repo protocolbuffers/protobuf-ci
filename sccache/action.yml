@@ -41,7 +41,7 @@ runs:
 
     - name: Validate cache name
       if: contains(inputs.cache-prefix, '+') || contains(inputs.cache-prefix, ' ')
-      uses: actions/github-script@v3
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0 (Node 24)
       with:
         script: |
           core.setFailed('Cache prefixes can't contain symbols or spaces.')
@@ -70,13 +70,13 @@ runs:
 
     - name: Install sccache on non-Linux machines
       if: ${{ runner.os != 'Linux' }}
-      uses: mozilla-actions/sccache-action@8417cffc2ec64127ad83077aceaa8631f7cdc83e # v0.0.3
+      uses: mozilla-actions/sccache-action@9e7fa8a12102821edf02ca5dbea1acd0f89a2696 # v0.0.10 (Node 24)
       with:
         version: ${{ inputs.version }}
 
     - name: Warm-up sccache server (non-docker)
       if: ${{ runner.os != 'Linux' }}
-      uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd # v2.8.3
+      uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
       with:
         timeout_minutes: 5
         retry_wait_seconds: 60

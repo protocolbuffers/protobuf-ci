@@ -56,4 +56,6 @@ runs:
 
     - name: Run
       shell: bash
-      run: ${{ inputs.command }}
+      run: |
+        set -ex
+        ${{ inputs.command }}

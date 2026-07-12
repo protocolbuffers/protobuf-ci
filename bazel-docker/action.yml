@@ -89,7 +89,7 @@ runs:
       with:
         image: ${{ inputs.image }}
         run-flags: --entrypoint "/bin/bash"
-        command: -l -c "${{ inputs.bash }}"
+        command: -l -c "set -ex; ${{ inputs.bash }}"
 
     - name: Run Bazel Docker
       uses: ./../../_actions/current/internal/docker-run

@@ -45,7 +45,7 @@ inputs:
   staleness-image:
     required: false
     description: "The docker image used to regenerate staleness files"
-    default: "us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:8.0.1-e0df73e51131ccaf53451355d22577f377357604"
+    default: "us-docker.pkg.dev/protobuf-build/containers/common/linux/bazel:8.7.0-4d8e80ef93b0219fb907af9dd4596b92946995d8"
     type: string
 
 runs:

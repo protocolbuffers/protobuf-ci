@@ -25,7 +25,7 @@ inputs:
   bazel-version:
     required: false
     description: Bazel version to use
-    default: "8.0.1"
+    default: "8.7.0"
     type: string
   bazel-flags:
     required: false

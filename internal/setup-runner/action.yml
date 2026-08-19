@@ -24,9 +24,9 @@ runs:
       shell: bash
       run: find . -type f -print0 | xargs -0 d2u 2>/dev/null || echo "Ignoring failure"
 
-    - name: Install bazelrc files
-      shell: bash
-      run: >
-        cp -f ci/*.bazelrc .
-        && cp -f ${{ runner.os }}.bazelrc .bazelrc
-        || echo "No ci folder found"
+    # - name: Install bazelrc files
+    #   shell: bash
+    #   run: >
+    #     cp -f ci/*.bazelrc .
+    #     && cp -f ${{ runner.os }}.bazelrc .bazelrc
+    #     || echo "No ci folder found"

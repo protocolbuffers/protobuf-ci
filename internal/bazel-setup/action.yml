@@ -41,12 +41,7 @@ runs:
 
     - name: Initialize Bazel flags
       shell: bash
-      run: echo "BAZEL_FLAGS=--config=ci-macos --keep_going --test_output=errors --test_timeout=600" >> $GITHUB_ENV
-
-    # - name: Enable platform-specific CI config
-    #   shell: bash
-    #   run: |
-    #     echo "build:macos --config=ci-macos" >> .bazelrc
+      run: echo "BAZEL_FLAGS=--config=ci --keep_going --test_output=errors --test_timeout=600" >> $GITHUB_ENV
 
     - name: Configure Bazel caching
       # Skip bazel cache for local act runs due to issue with credential files

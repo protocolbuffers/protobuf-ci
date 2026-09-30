@@ -43,11 +43,6 @@ runs:
       shell: bash
       run: echo "BAZEL_FLAGS=--keep_going --test_output=errors --test_timeout=600" >> $GITHUB_ENV
 
-    - name: Enable platform-specific CI config
-      shell: bash
-      run: |
-        echo "build:macos --config=ci-macos" >> .bazelrc
-
     - name: Configure Bazel caching
       # Skip bazel cache for local act runs due to issue with credential files
       # and nested docker images
